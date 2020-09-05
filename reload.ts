@@ -13,8 +13,9 @@ if (mainFile === undefined) {
 }
 const files = await findFiles(mainFile);
 const dir = path.dirname(mainFile);
+const basename = path.basename(mainFile);
 
-let process = startProcess(["deno", "run", "-A", `${mainFile}`], dir);
+let process = startProcess(["deno", "run", "-A", `${basename}`], dir);
 
 while (true) {
   await new Promise((r) => setTimeout(r, 500));
@@ -22,8 +23,9 @@ while (true) {
     console.log("Detected Change in File.");
     console.log("Reloading the process...");
     process.close();
-    process = startProcess(["deno", "run", "-A", `${mainFile}`], dir);
+    process = startProcess(["deno", "run", "-A", `${basename}`], dir);
     console.log("Process Reloaded");
+    console.log("---------------------------");
   }
 }
 
