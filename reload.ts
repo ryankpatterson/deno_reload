@@ -8,14 +8,21 @@ interface dateInfo {
 }
 
 const mainFile = parse(Deno.args).main;
+let args = parse(Deno.args)._.map((elem) => `--${elem}`);
+if (args.length === 0) {
+  args = ["-A"];
+} else if (args[0] === "--allow-none") {
+  args = [];
+}
 if (mainFile === undefined) {
   throw Error("Main File not Supplied");
 }
 const files = await findFiles(mainFile);
 const dir = path.dirname(mainFile);
 const basename = path.basename(mainFile);
+const cmd = ["deno", "run"].concat(args, [`${basename}`]);
 
-let process = startProcess(["deno", "run", "-A", `${basename}`], dir);
+let process = startProcess(cmd, dir);
 
 while (true) {
   await new Promise((r) => setTimeout(r, 500));
@@ -23,7 +30,7 @@ while (true) {
     console.log("Detected Change in File.");
     console.log("Reloading the process...");
     process.close();
-    process = startProcess(["deno", "run", "-A", `${basename}`], dir);
+    process = startProcess(cmd, dir);
     console.log("Process Reloaded");
     console.log("---------------------------");
   }
