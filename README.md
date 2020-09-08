@@ -15,6 +15,8 @@ deno run --allow-read --allow-run https://deno.land/x/live_reload@0.0.3/reload.t
 Note that the argument for --main should be the main module for the server.
 Also the main module can also be a .js file too.
 
+The --allow-read and --allow-run are needed because the program needs to access files and start subprocesses.
+
 To restrict permissions, add command line arguments such as allow-net and allow-read.
 For example, to restrict the Deno subprocess to only read and net access use:
 
